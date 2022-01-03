@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DateRange, Range } from "react-date-range";
 import dayjs from "dayjs";
 import styled from "styled-components";
+import useOutsideClick from "@hooks/useOutsideClick";
 import ko from "date-fns/locale/ko";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -14,6 +15,16 @@ const DashHeader = () => {
   const [currentCalendarStartDate] = useState(startDate);
   const [currentCalenderEndDate] = useState(endDate);
 
+  const handleModal = () => {
+    setIsModal(!isModal);
+  };
+
+  const handleClose = () => {
+    setIsModal(false);
+  };
+
+  const modalRef = useOutsideClick(handleClose);
+
   const [dateRange, setDateRange] = useState<Range[]>([
     {
       startDate: new Date(dayjs(currentCalendarStartDate).format("YYYY-MM-DD")),
@@ -24,27 +35,6 @@ const DashHeader = () => {
   const displayStartDate = dayjs(dateRange[0].startDate).format("YYYY-MM-DD");
   const displayEndDate = dayjs(dateRange[0].endDate).format("YYYY-MM-DD");
 
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const handleModal = () => {
-    setIsModal(!isModal);
-  };
-  const handleChange = () => {};
-
-  useEffect(() => {
-    document.addEventListener("mousedown", clickModalOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", clickModalOutside);
-    };
-  });
-
-  const clickModalOutside = (event) => {
-    if (!modalRef.current.contains(event.target)) {
-      setIsModal(false);
-    }
-  };
-
   return (
     <DashboarHeader>
       <Title>대시보드</Title>
@@ -53,7 +43,7 @@ const DashHeader = () => {
           {displayStartDate} ~ {displayEndDate}
         </DateText>
         {isModal && (
-          <DateRange
+          <DateCalendar
             editableDateInputs={false}
             locale={ko}
             months={2}
@@ -75,6 +65,7 @@ const DashHeader = () => {
 };
 
 const DashboarHeader = styled.div`
+  position: relative;
   display: flex;
   width: 100%;
   padding: 25px 0;
@@ -101,5 +92,11 @@ const DateWrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+`;
+
+const DateCalendar = styled(DateRange)`
+  position: absolute;
+  top: 60px;
+  right: 0;
 `;
 export default DashHeader;

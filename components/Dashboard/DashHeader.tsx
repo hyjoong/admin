@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DateRange, Range } from "react-date-range";
 import dayjs from "dayjs";
 import styled from "styled-components";
@@ -24,15 +24,31 @@ const DashHeader = () => {
   const displayStartDate = dayjs(dateRange[0].startDate).format("YYYY-MM-DD");
   const displayEndDate = dayjs(dateRange[0].endDate).format("YYYY-MM-DD");
 
+  const modalRef = useRef<HTMLDivElement>(null);
+
   const handleModal = () => {
     setIsModal(!isModal);
   };
   const handleChange = () => {};
 
+  useEffect(() => {
+    document.addEventListener("mousedown", clickModalOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", clickModalOutside);
+    };
+  });
+
+  const clickModalOutside = (event) => {
+    if (!modalRef.current.contains(event.target)) {
+      setIsModal(false);
+    }
+  };
+
   return (
     <DashboarHeader>
       <Title>대시보드</Title>
-      <DateWrapper>
+      <DateWrapper ref={modalRef}>
         <DateText onClick={handleModal}>
           {displayStartDate} ~ {displayEndDate}
         </DateText>
@@ -41,7 +57,7 @@ const DashHeader = () => {
             editableDateInputs={false}
             locale={ko}
             months={2}
-            onChange={handleChange}
+            onChange={(el) => setDateRange([el.selection])}
             ranges={dateRange}
             direction="horizontal"
             dateDisplayFormat="yyyy년 MM월 dd일"

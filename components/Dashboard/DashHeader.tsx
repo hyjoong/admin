@@ -75,8 +75,10 @@ const DashHeader = () => {
 };
 
 const DashboarHeader = styled.div`
-  width: 100%;
   display: flex;
+  width: 100%;
+  padding: 25px 0;
+  margin-bottom: 20px;
   justify-content: space-between;
 `;
 

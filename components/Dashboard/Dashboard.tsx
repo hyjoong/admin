@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import DashHeader from "./DashHeader";
+import TotalAd from "./TotalAd";
 
 const Dashboard = () => {
-   return (
+  return (
     <DashboardWrapper>
-      <DashHeader  />
+      <DashHeader />
+      <TotalAd />
     </DashboardWrapper>
   );
 };

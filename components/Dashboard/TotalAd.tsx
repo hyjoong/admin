@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Chart from "./Chart";
 
 const TotalAd = () => {
   const SECTION = ["ROAS", "광고비", "노출 수", "클릭수", "전환 수", "매출"];
@@ -21,6 +22,7 @@ const TotalAd = () => {
             </Card>
           ))}
         </CardList>
+        <Chart />
       </AdContainer>
     </TotalAdWrapper>
   );

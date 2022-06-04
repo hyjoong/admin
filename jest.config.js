@@ -13,6 +13,7 @@ module.exports = {
     // Handle CSS imports (without CSS modules)
     "^.+\\.(css|sass|scss)$": "<rootDir>/styles/__mocks__/styleMock.js",
     "^@src(.*)$": "<rootDir>/src$1",
+    "^@hooks(.*)$": "<rootDir>/hooks$1",
     "^components/(.*)": "<rootDir>/components/$1",
     // Handle image imports
     // https://jestjs.io/docs/webpack#handling-static-assets

@@ -12,8 +12,12 @@
     "eslint": "eslint .",
     "analyze": "ANALYZE=true next build",
     "test": "jest",
+    "test:e2e": "codeceptjs run --steps",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "codeceptjs": "codeceptjs run --steps",
+    "codeceptjs:headless": "HEADLESS=true codeceptjs run --steps",
+    "codeceptjs:ui": "codecept-ui --app"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^10.0.7",
@@ -41,6 +45,9 @@
   "devDependencies": {
     "@babel/core": "^7.13.10",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@codeceptjs/configure": "^0.8.0",
+    "@codeceptjs/examples": "^1.2.1",
+    "@codeceptjs/ui": "^0.4.6",
     "@storybook/addon-actions": "^6.4.22",
     "@storybook/addon-essentials": "^6.4.22",
     "@storybook/addon-interactions": "^6.4.22",
@@ -63,6 +70,7 @@
     "@typescript-eslint/parser": "^4.14.1",
     "babel-jest": "^28.1.0",
     "babel-loader": "^8.2.2",
+    "codeceptjs": "^3.3.3",
     "eslint": "^7.18.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.1.0",
@@ -75,6 +83,7 @@
     "jest-dom": "^4.0.0",
     "jest-environment-jsdom": "^28.1.0",
     "node-mocks-http": "^1.11.0",
+    "playwright": "^1.22.2",
     "prettier": "^2.2.1",
     "ts-jest": "^28.0.2",
     "ts-loader": "^9.3.0",

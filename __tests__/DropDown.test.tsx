@@ -19,6 +19,7 @@ describe("DropDown", () => {
   it("DropDown selectOption이 화면에 보인다.", () => {
     const { container } = renderDropDown();
     expect(container).toHaveTextContent(MOCKDROPDOWN[0]);
+    expect(container.firstChild).toMatchSnapshot();
   });
 
   //   isMenu가 false라서 제대로 동작 안 함

@@ -1,11 +1,17 @@
-import React from "react";
+import DropDown from "@components/DropDown/DropDown";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Chart from "./Chart";
 
 const TotalAd = () => {
   const SECTION = ["ROAS", "광고비", "노출 수", "클릭수", "전환 수", "매출"];
   const DROPDOWNMAIN = ["광고비", "노출 수", "클릭수", "전환 수", "매출"];
-  const DROPDOWNSUB = ["ROAS", "노출수", "클릭수", "전환 수", "매출", "없음"];
+  const DROPDOWNSUB = ["노출수", "클릭수", "전환 수", "매출", "없음"];
+  const PeriodList = ["주간", "일간"];
+
+  const [mainSelect, setMainSelect] = useState<string>(DROPDOWNMAIN[0]);
+  const [subSelect, setSubSelect] = useState<string>(DROPDOWNSUB[0]);
+  const [periodSelect, setPeriodSelect] = useState<string>(PeriodList[0]);
 
   return (
     <TotalAdWrapper>
@@ -22,6 +28,27 @@ const TotalAd = () => {
             </Card>
           ))}
         </CardList>
+        <DropContainer>
+          <DropDownLeft>
+            <DropDown
+              selectOption={mainSelect}
+              menuList={DROPDOWNMAIN}
+              setItemSelect={setMainSelect}
+            />
+            <DropDown
+              selectOption={subSelect}
+              menuList={DROPDOWNSUB}
+              setItemSelect={setSubSelect}
+            />
+          </DropDownLeft>
+          <DropDownRight>
+            <DropDown
+              selectOption={periodSelect}
+              menuList={PeriodList}
+              setItemSelect={setPeriodSelect}
+            />
+          </DropDownRight>
+        </DropContainer>
         <Chart />
       </AdContainer>
     </TotalAdWrapper>
@@ -51,6 +78,18 @@ const CardList = styled.ul`
   grid-column-gap: 35px;
   grid-row-gap: 20px;
 `;
+
+const DropContainer = styled.div`
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const DropDownLeft = styled.div`
+  display: flex;
+`;
+
+const DropDownRight = styled.div``;
 
 const Card = styled.li`
   display: flex;

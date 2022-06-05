@@ -28,3 +28,6 @@ out
 
 node_modules.nosync/
 *.env.*
+
+## CodeceptJS
+output

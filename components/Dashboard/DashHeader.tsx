@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { DateRange, Range } from "react-date-range";
+import React, { useState } from "react";
+import { DateRange } from "react-date-range";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import useOutsideClick from "@hooks/useOutsideClick";
 import ko from "date-fns/locale/ko";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { dateState } from "recoil/dashboard";
+
+const DAY_FORMAT = "YYYY-MM-DD";
 
 const DashHeader = () => {
-  const [isModal, setIsModal] = useState<boolean>(false);
-  const [startDate, setStartDate] = useState(new Date(2022, 3, 14));
-  const [endDate, setEndDate] = useState(new Date(2022, 3, 20));
+  const dateRange = useRecoilValue(dateState);
 
-  const [currentCalendarStartDate] = useState(startDate);
-  const [currentCalenderEndDate] = useState(endDate);
+  const [isModal, setIsModal] = useState<boolean>(false);
 
   const handleModal = () => {
     setIsModal(!isModal);
@@ -24,16 +25,16 @@ const DashHeader = () => {
   };
 
   const modalRef = useOutsideClick(handleClose);
+  const setDateRange = useSetRecoilState(dateState);
+  const handleDateRange = (selection) => {
+    setDateRange({
+      startDate: dayjs(selection.startDate).format(DAY_FORMAT),
+      endDate: dayjs(selection.endDate).format(DAY_FORMAT),
+    });
+  };
 
-  const [dateRange, setDateRange] = useState<Range[]>([
-    {
-      startDate: new Date(dayjs(currentCalendarStartDate).format("YYYY-MM-DD")),
-      endDate: new Date(dayjs(currentCalenderEndDate).format("YYYY-MM-DD")),
-      key: "selection",
-    },
-  ]);
-  const displayStartDate = dayjs(dateRange[0].startDate).format("YYYY-MM-DD");
-  const displayEndDate = dayjs(dateRange[0].endDate).format("YYYY-MM-DD");
+  const displayStartDate = dayjs(dateRange.startDate).format("YYYY-MM-DD");
+  const displayEndDate = dayjs(dateRange.endDate).format("YYYY-MM-DD");
 
   return (
     <DashboarHeader>
@@ -47,8 +48,14 @@ const DashHeader = () => {
             editableDateInputs={false}
             locale={ko}
             months={2}
-            onChange={(el) => setDateRange([el.selection])}
-            ranges={dateRange}
+            onChange={(el) => handleDateRange(el.selection)}
+            ranges={[
+              {
+                startDate: new Date(dateRange.startDate),
+                endDate: new Date(dateRange.endDate),
+                key: "selection",
+              },
+            ]}
             direction="horizontal"
             dateDisplayFormat="yyyy년 MM월 dd일"
             monthDisplayFormat="yyyy년 MM월"

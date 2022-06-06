@@ -2,6 +2,7 @@ import useOutsideClick from "@hooks/useOutsideClick";
 import DownArrow from "@components/DropDown/DownArrow";
 import React, { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import styled, { css } from "styled-components";
+import { CategoryToEnglish, periodToEnglish } from "utils/transferLang";
 
 interface Props {
   selectOption: string;
@@ -24,7 +25,9 @@ const DropDown = ({ selectOption, menuList, setItemSelect }: Props) => {
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     const selectValue = e.currentTarget.dataset.value;
-    setItemSelect(selectValue && selectValue);
+    menuList.length === 2
+      ? setItemSelect(periodToEnglish[selectValue])
+      : setItemSelect(CategoryToEnglish[selectValue]);
     setIsMenu(false);
   };
 

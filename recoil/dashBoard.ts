@@ -8,8 +8,8 @@ interface IDate {
 export const dateState = atom<IDate>({
   key: "dateState",
   default: {
-    startDate: "2022-02-10T00:00:00",
-    endDate: "2022-02-13T00:00:00",
+    startDate: "2022-02-10",
+    endDate: "2022-02-13",
   },
 });
 
@@ -22,14 +22,5 @@ export const setDateState = selector({
   set: ({ get, set }, newValue) => {
     const beforeDate = get(dateState);
     set(dateState, newValue);
-  },
-});
-
-export const categoryState = atom({
-  key: "categoryState",
-  default: {
-    selectOneCategory: "광고비",
-    selectTwoCategory: "노출수",
-    weekly: false,
   },
 });

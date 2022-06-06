@@ -1,17 +1,46 @@
 import DropDown from "@components/DropDown/DropDown";
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Chart from "./Chart";
+import DATA from "db/data.json";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+import { useRecoilState, useRecoilValue } from "recoil";
+import useFilterByCategory from "@hooks/useFilterByCategory";
+import { dropDownFirst, dropDownSecond, periodState } from "recoil/dropDown";
+import { categoryToKorean, periodToKorean } from "utils/transferLang";
+import { dateState } from "recoil/dashBoard";
+
+dayjs.extend(isBetween);
 
 const TotalAd = () => {
-  const SECTION = ["ROAS", "광고비", "노출 수", "클릭수", "전환 수", "매출"];
-  const DROPDOWNMAIN = ["광고비", "노출 수", "클릭수", "전환 수", "매출"];
-  const DROPDOWNSUB = ["노출수", "클릭수", "전환 수", "매출", "없음"];
-  const PeriodList = ["주간", "일간"];
+  const SECTION = ["ROAS", "광고비", "노출수", "클릭수", "전환수", "매출"];
+  const DROPDOWNMAIN = ["광고비", "노출수", "클릭수", "전환수", "매출"];
+  const DROPDOWNSUB = ["노출수", "클릭수", "전환수", "매출", "없음"];
+  const PeriodList = ["일간", "주간"];
 
-  const [mainSelect, setMainSelect] = useState<string>(DROPDOWNMAIN[0]);
-  const [subSelect, setSubSelect] = useState<string>(DROPDOWNSUB[0]);
-  const [periodSelect, setPeriodSelect] = useState<string>(PeriodList[0]);
+  const { daily } = DATA;
+
+  const [dropDownOne, setDropDownOne] = useRecoilState(dropDownFirst);
+  const [dropDownTwo, setDropDownTwo] = useRecoilState(dropDownSecond);
+  const [period, setPeriod] = useRecoilState(periodState);
+  const dateRange = useRecoilValue(dateState);
+
+  const filterDaily = daily.filter((day) => {
+    const date = dayjs(day.date);
+
+    return date.isBetween(dateRange.startDate, dateRange.endDate, "date", "[]");
+  });
+
+  const firstChart = useFilterByCategory({
+    daily: filterDaily,
+    category: dropDownOne,
+  });
+
+  const secondChart = useFilterByCategory({
+    daily: filterDaily,
+    category: dropDownTwo,
+  });
 
   return (
     <TotalAdWrapper>
@@ -31,25 +60,25 @@ const TotalAd = () => {
         <DropContainer>
           <DropDownLeft>
             <DropDown
-              selectOption={mainSelect}
+              selectOption={categoryToKorean[dropDownOne]}
               menuList={DROPDOWNMAIN}
-              setItemSelect={setMainSelect}
+              setItemSelect={setDropDownOne}
             />
             <DropDown
-              selectOption={subSelect}
+              selectOption={categoryToKorean[dropDownTwo]}
               menuList={DROPDOWNSUB}
-              setItemSelect={setSubSelect}
+              setItemSelect={setDropDownTwo}
             />
           </DropDownLeft>
           <DropDownRight>
             <DropDown
-              selectOption={periodSelect}
+              selectOption={periodToKorean[period]}
               menuList={PeriodList}
-              setItemSelect={setPeriodSelect}
+              setItemSelect={setPeriod}
             />
           </DropDownRight>
         </DropContainer>
-        <Chart />
+        <Chart firstChart={firstChart} secondChart={secondChart} />
       </AdContainer>
     </TotalAdWrapper>
   );

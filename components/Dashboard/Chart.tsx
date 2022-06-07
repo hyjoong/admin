@@ -10,31 +10,17 @@ import {
   VictoryVoronoiContainer,
 } from "victory";
 
+interface IProp {
+  firstChart: Data[];
+  secondChart: Data[];
+}
+
 type Data = {
   x: string;
   y: number;
 };
 
-const Chart = () => {
-  const firstData = [
-    { x: "2022-04-14", y: 290.56 },
-    { x: "2022-04-15", y: 378.11 },
-    { x: "2022-04-16", y: 299.29 },
-    { x: "2022-04-17", y: 219.04 },
-    { x: "2022-04-18", y: 510.15 },
-    { x: "2022-04-19", y: 670.64 },
-    { x: "2022-04-20", y: 473.61 },
-  ];
-
-  const secondData = [
-    { x: "2022-04-14", y: 650788 },
-    { x: "2022-04-15", y: 641774 },
-    { x: "2022-04-16", y: 671625 },
-    { x: "2022-04-17", y: 702049 },
-    { x: "2022-04-18", y: 650255 },
-    { x: "2022-04-19", y: 634742 },
-    { x: "2022-04-20", y: 671598 },
-  ];
+const Chart = ({ firstChart, secondChart }: IProp) => {
   const options = {
     width: 1050,
     height: 400,
@@ -86,10 +72,10 @@ const Chart = () => {
           }}
           tickValues={[0.2, 0.4, 0.6, 0.8, 1]}
           tickFormat={(t) =>
-            (t * maxima(getMaxNum(firstData))).toLocaleString()
+            (t * maxima(getMaxNum(firstChart))).toLocaleString()
           }
         />
-        {secondData && (
+        {secondChart && (
           <VictoryAxis
             dependentAxis
             offsetX={910}
@@ -102,12 +88,12 @@ const Chart = () => {
             }}
             tickValues={[0.2, 0.4, 0.6, 0.8, 1]}
             tickFormat={(t) =>
-              (t * maxima(getMaxNum(secondData))).toLocaleString()
+              (t * maxima(getMaxNum(secondChart))).toLocaleString()
             }
           />
         )}
         <VictoryLine
-          data={firstData}
+          data={firstChart}
           animate={{
             duration: 2000,
             onLoad: { duration: 1000 },
@@ -116,20 +102,22 @@ const Chart = () => {
             parent: { border: "1px solid #ccc" },
             data: { stroke: "#4fadf7" },
           }}
-          y={(datum) => datum.y / maxima(getMaxNum(firstData))}
+          y={(datum) => datum.y / maxima(getMaxNum(firstChart))}
         />
-        {secondData && (
+        {secondChart && (
           <VictoryLine
-            data={secondData}
+            data={secondChart}
             animate={{
               duration: 2000,
               onLoad: { duration: 1000 },
             }}
             style={{
               parent: { border: "1px solid #ccc" },
-              data: { stroke: "#85da47" },
+              data: {
+                stroke: "#85da47",
+              },
             }}
-            y={(datum) => datum.y / maxima(getMaxNum(secondData))}
+            y={(datum) => datum.y / maxima(getMaxNum(secondChart))}
           />
         )}
       </VictoryChart>

@@ -11,7 +11,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": false,
+    "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
     "rootDir": ".",
@@ -19,7 +19,9 @@
       "@components/*": ["components/*"],
       "@styles/*": ["styles/*"],
       "@pages/*": ["pages/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@recoil/*": ["recoil/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": [

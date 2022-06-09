@@ -7,7 +7,7 @@ import ko from "date-fns/locale/ko";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { dateState } from "recoil/dashboard";
+import { dateState } from "@recoil/dashBoard";
 
 const DAY_FORMAT = "YYYY-MM-DD";
 

@@ -2,7 +2,7 @@ import useOutsideClick from "@hooks/useOutsideClick";
 import DownArrow from "@components/DropDown/DownArrow";
 import React, { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import styled, { css } from "styled-components";
-import { CategoryToEnglish, periodToEnglish } from "utils/transferLang";
+import { CategoryToEnglish, periodToEnglish } from "@utils/transferLang";
 
 interface Props {
   selectOption: string;

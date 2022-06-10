@@ -12,7 +12,6 @@ export const CategoryToEnglish = {
   클릭수: "click",
   전환수: "conv",
   매출: "sales",
-  없음: null,
 };
 
 export const periodToKorean = {

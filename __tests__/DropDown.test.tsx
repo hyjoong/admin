@@ -3,6 +3,7 @@ import { render } from "@testing-library/react";
 
 describe("DropDown", () => {
   const MOCKDROPDOWN = ["광고비", "노출 수", "클릭수", "전환 수", "매출"];
+  const MOCKEXCEPT = "노출 수";
   const MockSelect = MOCKDROPDOWN[0];
   const setMockSelect = jest.fn();
 
@@ -10,6 +11,7 @@ describe("DropDown", () => {
     return render(
       <DropDown
         selectOption={MockSelect}
+        exceptOption={MOCKEXCEPT}
         menuList={MOCKDROPDOWN}
         setItemSelect={setMockSelect}
       />

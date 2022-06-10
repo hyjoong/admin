@@ -16,7 +16,7 @@ dayjs.extend(isBetween);
 const TotalAd = () => {
   const SECTION = ["ROAS", "광고비", "노출수", "클릭수", "전환수", "매출"];
   const DROPDOWNMAIN = ["광고비", "노출수", "클릭수", "전환수", "매출"];
-  const DROPDOWNSUB = ["노출수", "클릭수", "전환수", "매출", "없음"];
+  const DROPDOWNSUB = ["노출수", "클릭수", "전환수", "매출"];
   const PeriodList = ["일간", "주간"];
 
   const { daily } = DATA;
@@ -61,11 +61,13 @@ const TotalAd = () => {
           <DropDownLeft>
             <DropDown
               selectOption={categoryToKorean[dropDownOne]}
+              exceptOption={categoryToKorean[dropDownTwo]}
               menuList={DROPDOWNMAIN}
               setItemSelect={setDropDownOne}
             />
             <DropDown
               selectOption={categoryToKorean[dropDownTwo]}
+              exceptOption={categoryToKorean[dropDownOne]}
               menuList={DROPDOWNSUB}
               setItemSelect={setDropDownTwo}
             />

@@ -6,11 +6,17 @@ import { CategoryToEnglish, periodToEnglish } from "@utils/transferLang";
 
 interface Props {
   selectOption: string;
+  exceptOption?: string;
   menuList: string[];
   setItemSelect: Dispatch<SetStateAction<string>>;
 }
 
-const DropDown = ({ selectOption, menuList, setItemSelect }: Props) => {
+const DropDown = ({
+  selectOption,
+  exceptOption,
+  menuList,
+  setItemSelect,
+}: Props) => {
   const [isMenu, setIsMenu] = useState<boolean>(false);
 
   const handleMenu = () => {
@@ -41,13 +47,16 @@ const DropDown = ({ selectOption, menuList, setItemSelect }: Props) => {
       </DropDownBox>
       <OptionList>
         {isMenu &&
-          menuList.map((item, index) => (
-            <Option key={index}>
-              <button data-value={item} onClick={(e) => handleClick(e)}>
-                {item}
-              </button>
-            </Option>
-          ))}
+          menuList.map(
+            (item, index) =>
+              item !== exceptOption && (
+                <Option key={index}>
+                  <button data-value={item} onClick={(e) => handleClick(e)}>
+                    {item}
+                  </button>
+                </Option>
+              )
+          )}
       </OptionList>
     </DropDownContainer>
   );

@@ -9,14 +9,16 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import useFilterByCategory from "@hooks/useFilterByCategory";
 import { dropDownFirst, dropDownSecond, periodState } from "recoil/dropDown";
 import { categoryToKorean, periodToKorean } from "utils/transferLang";
-import { dateState } from "recoil/dashBoard";
+import { dateState, prevDateSelector } from "recoil/dashBoard";
+import { useCardDiff, useCardRate } from "@hooks/useCardRate";
+import IncreaseIcon from "@components/svg/IncreaseIcon";
+import DecreaseIcon from "@components/svg/DecreaseIcon";
 
 dayjs.extend(isBetween);
 
 const TotalAd = () => {
   const SECTION = ["ROAS", "광고비", "노출수", "클릭수", "전환수", "매출"];
-  const DROPDOWNMAIN = ["광고비", "노출수", "클릭수", "전환수", "매출"];
-  const DROPDOWNSUB = ["노출수", "클릭수", "전환수", "매출"];
+  const DROPDOWNLIST = ["광고비", "노출수", "클릭수", "전환수", "매출"];
   const PeriodList = ["일간", "주간"];
 
   const { daily } = DATA;
@@ -26,10 +28,17 @@ const TotalAd = () => {
   const [period, setPeriod] = useRecoilState(periodState);
   const dateRange = useRecoilValue(dateState);
 
+  const { prevStartDate, prevEndDate } = useRecoilValue(prevDateSelector);
+
   const filterDaily = daily.filter((day) => {
     const date = dayjs(day.date);
 
     return date.isBetween(dateRange.startDate, dateRange.endDate, "date", "[]");
+  });
+
+  const filterPrevDaily = daily.filter((day) => {
+    const date = dayjs(day.date);
+    return date.isBetween(prevStartDate, prevEndDate, "date", "[]");
   });
 
   const firstChart = useFilterByCategory({
@@ -42,18 +51,27 @@ const TotalAd = () => {
     category: dropDownTwo,
   });
 
+  const totalCardData = useCardRate(filterDaily);
+  const totalPrevCardData = useCardRate(filterPrevDaily);
+  const cardData = useCardDiff(totalCardData, totalPrevCardData);
+
   return (
     <TotalAdWrapper>
       <Title>통합 광고 현황</Title>
       <AdContainer>
         <CardList>
-          {SECTION?.map((item, index) => (
+          {cardData?.map((item, index) => (
             <Card key={index}>
               <CardContent>
-                <ContentTitle>{item}</ContentTitle>
-                <ContentCount>697%</ContentCount>
+                <ContentTitle>{item.title}</ContentTitle>
+                <ContentCount>{item.value}</ContentCount>
               </CardContent>
-              <CardRate>53만 회</CardRate>
+              <CardRate>
+                <RateCount>{item.calc}</RateCount>
+                <Icon>
+                  {item.increase ? <IncreaseIcon /> : <DecreaseIcon />}
+                </Icon>
+              </CardRate>
             </Card>
           ))}
         </CardList>
@@ -62,13 +80,13 @@ const TotalAd = () => {
             <DropDown
               selectOption={categoryToKorean[dropDownOne]}
               exceptOption={categoryToKorean[dropDownTwo]}
-              menuList={DROPDOWNMAIN}
+              menuList={DROPDOWNLIST}
               setItemSelect={setDropDownOne}
             />
             <DropDown
               selectOption={categoryToKorean[dropDownTwo]}
               exceptOption={categoryToKorean[dropDownOne]}
-              menuList={DROPDOWNSUB}
+              menuList={DROPDOWNLIST}
               setItemSelect={setDropDownTwo}
             />
           </DropDownLeft>
@@ -141,10 +159,18 @@ const CardContent = styled.div`
 `;
 
 const CardRate = styled.div`
+  display: flex;
+  align-items: flex-end;
+`;
+
+const RateCount = styled.div`
   font-size: 12px;
   color: #94a2ad;
   display: flex;
-  align-items: flex-end;
+`;
+
+const Icon = styled.div`
+  margin-left: 4px;
 `;
 
 const ContentTitle = styled.span`

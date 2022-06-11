@@ -1,4 +1,4 @@
-import { IDaily } from "types/daily";
+import { IDaily } from "types/totalAd";
 
 interface IProps {
   daily: IDaily[];

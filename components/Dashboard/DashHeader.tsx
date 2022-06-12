@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { DateRange } from "react-date-range";
 import dayjs from "dayjs";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import useOutsideClick from "@hooks/useOutsideClick";
 import ko from "date-fns/locale/ko";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { dateState } from "@recoil/dashBoard";
+import DownArrow from "@components/DropDown/DownArrow";
 
 const DAY_FORMAT = "YYYY-MM-DD";
 
@@ -41,7 +42,12 @@ const DashHeader = () => {
       <Title>대시보드</Title>
       <DateWrapper ref={modalRef}>
         <DateText onClick={handleModal}>
-          {displayStartDate} ~ {displayEndDate}
+          <span>
+            {displayStartDate} ~ {displayEndDate}
+          </span>
+          <ArrowIcon isModal={isModal}>
+            <DownArrow />
+          </ArrowIcon>
         </DateText>
         {isModal && (
           <DateCalendar
@@ -92,6 +98,17 @@ const DateText = styled.span`
   padding: 10px 0;
   justify-content: flex-end;
   cursor: pointer;
+`;
+
+const ArrowIcon = styled.div<{ isModal: boolean }>`
+  margin-left: 5px;
+  transition: transform 0.3s;
+  ${({ isModal }) =>
+    isModal &&
+    css`
+      transform: rotate(-180deg);
+      transition: transform 0.3s;
+    `}
 `;
 
 const DateWrapper = styled.div`

@@ -16,7 +16,7 @@ const MainPage = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 100px 40px 80px;
+  padding: 50px 40px 80px;
   background: #f6f7f8;
 `;
 

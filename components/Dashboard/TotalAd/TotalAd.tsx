@@ -8,11 +8,12 @@ import isBetween from "dayjs/plugin/isBetween";
 import { useRecoilState, useRecoilValue } from "recoil";
 import useFilterByCategory from "@hooks/useFilterByCategory";
 import { dropDownFirst, dropDownSecond, periodState } from "recoil/dropDown";
-import { categoryToKorean, periodToKorean } from "utils/transferLang";
+import { categoryToKorean } from "utils/transferLang";
 import { dateState, prevDateSelector } from "recoil/dashBoard";
 import { useCardDiff, useCardRate } from "@hooks/useCardRate";
 import IncreaseIcon from "@components/svg/IncreaseIcon";
 import DecreaseIcon from "@components/svg/DecreaseIcon";
+import ContentLayout from "@components/ContentLayout/ContentLayout";
 
 dayjs.extend(isBetween);
 
@@ -56,71 +57,50 @@ const TotalAd = () => {
   const cardData = useCardDiff(totalCardData, totalPrevCardData);
 
   return (
-    <TotalAdWrapper>
-      <Title>통합 광고 현황</Title>
-      <AdContainer>
-        <CardList>
-          {cardData?.map((item, index) => (
-            <Card key={index}>
-              <CardContent>
-                <ContentTitle>{item.title}</ContentTitle>
-                <ContentCount>{item.value}</ContentCount>
-              </CardContent>
-              <CardRate>
-                <RateCount>{item.calc}</RateCount>
-                <Icon>
-                  {item.increase ? <IncreaseIcon /> : <DecreaseIcon />}
-                </Icon>
-              </CardRate>
-            </Card>
-          ))}
-        </CardList>
-        <DropContainer>
-          <DropDownLeft>
-            <DropDown
-              selectOption={categoryToKorean[dropDownOne]}
-              exceptOption={categoryToKorean[dropDownTwo]}
-              menuList={DROPDOWNLIST}
-              setItemSelect={setDropDownOne}
-              order={1}
-            />
-            <DropDown
-              selectOption={categoryToKorean[dropDownTwo]}
-              exceptOption={categoryToKorean[dropDownOne]}
-              menuList={DROPDOWNLIST}
-              setItemSelect={setDropDownTwo}
-              order={2}
-            />
-          </DropDownLeft>
-          {/* <DropDownRight>
+    <ContentLayout title="통합 광고 현황">
+      <CardList>
+        {cardData?.map((item, index) => (
+          <Card key={index}>
+            <CardContent>
+              <ContentTitle>{item.title}</ContentTitle>
+              <ContentCount>{item.value}</ContentCount>
+            </CardContent>
+            <CardRate>
+              <RateCount>{item.calc}</RateCount>
+              <Icon>{item.increase ? <IncreaseIcon /> : <DecreaseIcon />}</Icon>
+            </CardRate>
+          </Card>
+        ))}
+      </CardList>
+      <DropContainer>
+        <DropDownLeft>
+          <DropDown
+            selectOption={categoryToKorean[dropDownOne]}
+            exceptOption={categoryToKorean[dropDownTwo]}
+            menuList={DROPDOWNLIST}
+            setItemSelect={setDropDownOne}
+            order={1}
+          />
+          <DropDown
+            selectOption={categoryToKorean[dropDownTwo]}
+            exceptOption={categoryToKorean[dropDownOne]}
+            menuList={DROPDOWNLIST}
+            setItemSelect={setDropDownTwo}
+            order={2}
+          />
+        </DropDownLeft>
+        {/* <DropDownRight>
             <DropDown
               selectOption={periodToKorean[period]}
               menuList={PeriodList}
               setItemSelect={setPeriod}
             />
           </DropDownRight> */}
-        </DropContainer>
-        <Chart firstChart={firstChart} secondChart={secondChart} />
-      </AdContainer>
-    </TotalAdWrapper>
+      </DropContainer>
+      <Chart firstChart={firstChart} secondChart={secondChart} />
+    </ContentLayout>
   );
 };
-
-const TotalAdWrapper = styled.div``;
-
-const Title = styled.h1`
-  color: #3a474e;
-  font-weight: 700;
-  line-height: 19px;
-  padding: 20px 0;
-`;
-
-const AdContainer = styled.div`
-  background-color: #ffffff;
-  height: 654px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
-  border-radius: 20px;
-`;
 
 const CardList = styled.ul`
   display: grid;

@@ -8,6 +8,7 @@ interface Props {
   selectOption: string;
   exceptOption?: string;
   menuList: string[];
+  order?: number;
   setItemSelect: Dispatch<SetStateAction<string>>;
 }
 
@@ -15,10 +16,10 @@ const DropDown = ({
   selectOption,
   exceptOption,
   menuList,
+  order,
   setItemSelect,
 }: Props) => {
   const [isMenu, setIsMenu] = useState<boolean>(false);
-
   const handleMenu = () => {
     setIsMenu(!isMenu);
   };
@@ -39,7 +40,7 @@ const DropDown = ({
 
   return (
     <DropDownContainer ref={dorwpDownRef}>
-      <DropDownBox onClick={handleMenu}>
+      <DropDownBox onClick={handleMenu} order={order}>
         {selectOption}
         <ArrowIcon isMenu={isMenu}>
           <DownArrow />
@@ -64,23 +65,43 @@ const DropDown = ({
 
 const DropDownContainer = styled.div`
   position: relative;
+
   &:not(:last-child) {
     margin-right: 10px;
   }
 `;
 
-const DropDownBox = styled.div`
+const DropDownBox = styled.div<{ order: number }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
-  width: 90px;
+  padding: 10px 15px 10px 35px;
+  width: 60px;
   height: 20px;
   border: 1px solid #d1d8dc;
   font-size: 14px;
   font-weight: 600;
   border-radius: 10px;
   cursor: pointer;
+
+  ::before {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 15px;
+    left: 20px;
+    content: "";
+    border-radius: 50%;
+
+    ${({ order }) =>
+      order === 1
+        ? css`
+            background-color: #4fadf7;
+          `
+        : css`
+            background-color: #85da47;
+          `};
+  }
 `;
 
 const ArrowIcon = styled.div<{ isMenu: boolean }>`
@@ -111,14 +132,16 @@ const Option = styled.li`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  &:not(:last-child) {
-    border-bottom: 1px solid #d1d8dc;
-  }
+
   button {
     width: 100%;
     height: 100%;
     font-size: 14px;
     font-weight: 600;
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #d1d8dc;
   }
 `;
 

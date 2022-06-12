@@ -82,21 +82,23 @@ const TotalAd = () => {
               exceptOption={categoryToKorean[dropDownTwo]}
               menuList={DROPDOWNLIST}
               setItemSelect={setDropDownOne}
+              order={1}
             />
             <DropDown
               selectOption={categoryToKorean[dropDownTwo]}
               exceptOption={categoryToKorean[dropDownOne]}
               menuList={DROPDOWNLIST}
               setItemSelect={setDropDownTwo}
+              order={2}
             />
           </DropDownLeft>
-          <DropDownRight>
+          {/* <DropDownRight>
             <DropDown
               selectOption={periodToKorean[period]}
               menuList={PeriodList}
               setItemSelect={setPeriod}
             />
-          </DropDownRight>
+          </DropDownRight> */}
         </DropContainer>
         <Chart firstChart={firstChart} secondChart={secondChart} />
       </AdContainer>

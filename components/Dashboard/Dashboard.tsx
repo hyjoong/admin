@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import DashHeader from "./DashHeader";
-import TotalAd from "./TotalAd";
+import TotalAd from "./TotalAd/TotalAd";
 
 const Dashboard = () => {
   return (

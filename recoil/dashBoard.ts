@@ -9,8 +9,8 @@ interface IDate {
 export const dateState = atom<IDate>({
   key: "dateState",
   default: {
-    startDate: "2022-02-10",
-    endDate: "2022-02-13",
+    startDate: "2022-02-20",
+    endDate: "2022-03-07",
   },
 });
 

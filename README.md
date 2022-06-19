@@ -1,8 +1,9 @@
-#### boilerplate
+### 관리자 페이지
 
-- next.js (v12.1.6)
-- styled-components
-- react-query
-- storybook
-- jest
-- testing-library
+https://admin-chart.netlify.app
+
+### 라이브러리
+
+- recoil
+- victory
+- react-date-range

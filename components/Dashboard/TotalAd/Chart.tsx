@@ -55,7 +55,7 @@ const Chart = ({ firstChart, secondChart }: IProp) => {
                   stroke: "lightgray",
                   fill: "white",
                 }}
-                flyoutPadding={15}
+                style={{ fontSize: 10, fill: "black" }}
               />
             }
           />

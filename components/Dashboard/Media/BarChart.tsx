@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import { useRecoilValue } from "recoil";
 import { dateState } from "@recoil/dashBoard";
 import { useGraphData } from "@hooks/useGraphData";
+import styled from "styled-components";
 
 const TITLE = ["광고비", "매출", "노출 수", "클릭 수", "전환 수"];
 
@@ -43,6 +44,11 @@ const LEGEND_STYLE = {
   ],
 };
 
+const TOOLTIP_STYLE = {
+  flyoutStyle: { fill: "white", stroke: "lightgray" },
+  style: { fontSize: 10, fill: "black" },
+};
+
 const { byChannel } = DATA;
 
 const BarChart = () => {
@@ -62,7 +68,7 @@ const BarChart = () => {
 
   console.log("Data", filterBarData);
   return (
-    <div>
+    <ChartContainer>
       <VictoryChart
         theme={VictoryTheme.material}
         {...options}
@@ -73,33 +79,47 @@ const BarChart = () => {
         }}
       >
         <VictoryAxis tickValues={TITLE} tickFormat={TITLE} />
-        <VictoryAxis dependentAxis tickFormat={(x) => `${x}%`} />
+        <VictoryAxis
+          dependentAxis
+          tickFormat={(x) => `${x}%`}
+          style={{
+            axis: { stroke: "transparent" },
+            ticks: { stroke: "transparent" },
+            tickLabels: { fontSize: 12, padding: 15, fill: "#94A2AD" },
+            grid: { stroke: "lightgray" },
+          }}
+        />
         <VictoryStack colorScale={["#AC8AF8", "#85DA47", "#4FADF7", "#FFEB00"]}>
           <VictoryBar
             data={facebook}
-            labelComponent={<VictoryTooltip />}
+            labelComponent={<VictoryTooltip {...TOOLTIP_STYLE} />}
             {...GRAPH_STYLE}
           />
           <VictoryBar
             data={google}
-            labelComponent={<VictoryTooltip />}
+            labelComponent={<VictoryTooltip {...TOOLTIP_STYLE} />}
             {...GRAPH_STYLE}
           />
           <VictoryBar
             data={kakao}
-            labelComponent={<VictoryTooltip />}
+            labelComponent={<VictoryTooltip {...TOOLTIP_STYLE} />}
             {...GRAPH_STYLE}
           />
           <VictoryBar
             data={naver}
-            labelComponent={<VictoryTooltip />}
+            labelComponent={<VictoryTooltip {...TOOLTIP_STYLE} />}
             {...GRAPH_STYLE}
           />
         </VictoryStack>
         <VictoryLegend orientation="horizontal" {...LEGEND_STYLE} />
       </VictoryChart>
-    </div>
+    </ChartContainer>
   );
 };
+
+const ChartContainer = styled.div`
+  width: 80%;
+  margin: 0 auto;
+`;
 
 export default BarChart;

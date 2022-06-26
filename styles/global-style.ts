@@ -14,6 +14,11 @@ export const GlobalStyle = createGlobalStyle`
         font-display: fallback; 
         -ms-overflow-style: none;
         scrollbar-width: none;
+        @media screen and (max-width: 710px) {
+            ::-webkit-scrollbar {
+                display: none;
+            }
+        }
     }
     button {
         background: none;

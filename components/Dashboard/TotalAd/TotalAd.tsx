@@ -103,6 +103,12 @@ const TotalAd = () => {
 };
 
 const CardList = styled.ul`
+  @media screen and (max-width: 1360px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (max-width: 1010px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
   display: grid;
   padding: 40px;
   grid-template-columns: repeat(3, 1fr);
@@ -125,7 +131,7 @@ const DropDownRight = styled.div``;
 const Card = styled.li`
   display: flex;
   justify-content: space-between;
-  width: 224px;
+  min-width: 224px;
   height: 43px;
   padding: 18px 40px;
   border: 0.5px solid #edeff1;

@@ -14,8 +14,6 @@ const Dashboard = () => {
   );
 };
 
-const DashboardWrapper = styled.div`
-  width: 100%;
-`;
+const DashboardWrapper = styled.div``;
 
 export default Dashboard;

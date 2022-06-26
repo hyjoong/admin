@@ -31,6 +31,9 @@ const SideBarWrapper = styled.div`
   padding: 50px;
   background: #ffffff;
   box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.04);
+  @media screen and (max-width: 710px) {
+    display: none;
+  }
 `;
 
 const LogoBox = styled.div``;

@@ -1,24 +1,37 @@
 import Link from "next/link";
-import React from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
+import styled, { css } from "styled-components";
+
+const MENU_LIST = [
+  { name: "대시보드", link: "/" },
+  { name: "광고관리", link: "/advertise" },
+];
 
 const SideBar = () => {
+  const [activeMenu, setActiveMenu] = useState<number>(0);
+
+  const handleMenu = (index: number) => {
+    setActiveMenu(index);
+  };
+
   return (
     <SideBarWrapper>
       <LogoBox>
         <Logo src="/images/logo.png" />
         <UnderLine />
       </LogoBox>
-      {/* <Subtitle>서비스</Subtitle> */}
       <Subtitle>광고센터</Subtitle>
       <NavList>
-        <Link href="/">
-          <li>대시보드</li>
-        </Link>
-
-        <Link href="/advertise">
-          <li>광고관리</li>
-        </Link>
+        {MENU_LIST.map((nav, index) => (
+          <Link href={`${nav.link}`} as={`${nav.link}`}>
+            <NavItem
+              active={activeMenu === index}
+              onClick={() => handleMenu(index)}
+            >
+              {`${nav.name}`}
+            </NavItem>
+          </Link>
+        ))}
       </NavList>
     </SideBarWrapper>
   );
@@ -27,7 +40,7 @@ const SideBar = () => {
 const SideBarWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 240px;
+  min-width: 180px;
   padding: 50px;
   background: #ffffff;
   box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.04);
@@ -49,20 +62,30 @@ const NavList = styled.ul`
   width: 80%;
   height: 400px;
   margin: 10px 0;
-  li {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-    height: 60px;
-    font-weight: 700;
-    color: #586cf5;
-    border-radius: 10px;
-    &:hover {
-      cursor: pointer;
-      background-color: #edeff1;
-    }
+`;
+
+const NavItem = styled.li<{ active: boolean }>`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  height: 50px;
+  margin: 5px 0;
+  font-weight: 700;
+  color: #586cf5;
+  border-radius: 10px;
+  &:hover {
+    cursor: pointer;
   }
+
+  ${({ active }) =>
+    active
+      ? css`
+          background-color: #edeff1;
+          color: #586cf5;
+          font-weight: 700;
+        `
+      : css``}
 `;
 
 const Subtitle = styled.span`

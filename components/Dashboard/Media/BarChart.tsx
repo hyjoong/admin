@@ -49,24 +49,14 @@ const TOOLTIP_STYLE = {
   style: { fontSize: 10, fill: "black" },
 };
 
-const { byChannel } = DATA;
-
-const BarChart = () => {
+const BarChart = ({ data }) => {
   const options = {
     width: 700,
     height: 400,
   };
-  const dateRange = useRecoilValue(dateState);
 
-  const filterChannel = byChannel.filter((day) => {
-    const date = dayjs(day.date);
-    return date.isBetween(dateRange.startDate, dateRange.endDate, "date", "[]");
-  });
+  const { facebook, google, kakao, naver } = data;
 
-  const filterBarData = useGraphData(filterChannel);
-  const { facebook, google, kakao, naver } = filterBarData;
-
-  console.log("Data", filterBarData);
   return (
     <ChartContainer>
       <VictoryChart

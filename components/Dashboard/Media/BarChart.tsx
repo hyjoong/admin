@@ -79,7 +79,7 @@ const BarChart = ({ data }) => {
             grid: { stroke: "lightgray" },
           }}
         />
-        <VictoryStack colorScale={["#AC8AF8", "#85DA47", "#4FADF7", "#FFEB00"]}>
+        <VictoryStack colorScale={["#4FADF7", "#AC8AF8", "#FFEB00", "#85DA47"]}>
           <VictoryBar
             data={facebook}
             labelComponent={<VictoryTooltip {...TOOLTIP_STYLE} />}

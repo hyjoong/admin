@@ -19,26 +19,26 @@ const Table = ({ data }) => {
         <tr>
           <td>페이스북</td>
           {facebook.map((item, index) => (
-            <td key={index}>{Math.floor(item.value).toLocaleString()}</td>
+            <td key={index}>{item.value}</td>
           ))}
         </tr>
 
         <tr>
           <td>구글</td>
           {google.map((item, index) => (
-            <td key={index}>{Math.floor(item.value).toLocaleString()}</td>
+            <td key={index}>{item.value}</td>
           ))}
         </tr>
         <tr>
           <td>카카오</td>
           {kakao.map((item, index) => (
-            <td key={index}>{Math.floor(item.value).toLocaleString()}</td>
+            <td key={index}>{item.value}</td>
           ))}
         </tr>
         <tr>
           <td>네이버</td>
           {naver.map((item, index) => (
-            <td key={index}>{Math.floor(item.value).toLocaleString()}</td>
+            <td key={index}>{item.value}</td>
           ))}
         </tr>
       </tbody>

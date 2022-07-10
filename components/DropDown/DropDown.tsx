@@ -94,13 +94,14 @@ const DropDownBox = styled.div<{ order: number }>`
     border-radius: 50%;
 
     ${({ order }) =>
-      order === 1
+      order &&
+      (order === 1
         ? css`
             background-color: #4fadf7;
           `
         : css`
             background-color: #85da47;
-          `};
+          `)};
   }
 `;
 

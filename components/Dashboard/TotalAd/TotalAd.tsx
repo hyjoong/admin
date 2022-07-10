@@ -8,7 +8,7 @@ import isBetween from "dayjs/plugin/isBetween";
 import { useRecoilState, useRecoilValue } from "recoil";
 import useFilterByCategory from "@hooks/useFilterByCategory";
 import { dropDownFirst, dropDownSecond, periodState } from "recoil/dropDown";
-import { categoryToKorean } from "utils/transferLang";
+import { categoryToKorean, periodToKorean } from "utils/transferLang";
 import { dateState, prevDateSelector } from "recoil/dashBoard";
 import { useCardDiff, useCardRate } from "@hooks/useCardRate";
 import IncreaseIcon from "@components/svg/IncreaseIcon";
@@ -18,7 +18,6 @@ import ContentLayout from "@components/ContentLayout/ContentLayout";
 dayjs.extend(isBetween);
 
 const TotalAd = () => {
-  const SECTION = ["ROAS", "광고비", "노출수", "클릭수", "전환수", "매출"];
   const DROPDOWNLIST = ["광고비", "노출수", "클릭수", "전환수", "매출"];
   const PeriodList = ["일간", "주간"];
 
@@ -45,11 +44,13 @@ const TotalAd = () => {
   const firstChart = useFilterByCategory({
     daily: filterDaily,
     category: dropDownOne,
+    weekly: period,
   });
 
   const secondChart = useFilterByCategory({
     daily: filterDaily,
     category: dropDownTwo,
+    weekly: period,
   });
 
   const totalCardData = useCardRate(filterDaily);
@@ -89,13 +90,13 @@ const TotalAd = () => {
             order={2}
           />
         </DropDownLeft>
-        {/* <DropDownRight>
-            <DropDown
-              selectOption={periodToKorean[period]}
-              menuList={PeriodList}
-              setItemSelect={setPeriod}
-            />
-          </DropDownRight> */}
+        <DropDownRight>
+          <DropDown
+            selectOption={periodToKorean[period]}
+            menuList={PeriodList}
+            setItemSelect={setPeriod}
+          />
+        </DropDownRight>
       </DropContainer>
       <Chart firstChart={firstChart} secondChart={secondChart} />
     </ContentLayout>

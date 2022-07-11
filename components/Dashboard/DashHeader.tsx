@@ -6,16 +6,22 @@ import useOutsideClick from "@hooks/useOutsideClick";
 import ko from "date-fns/locale/ko";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { dateState } from "@recoil/dashBoard";
 import DownArrow from "@components/DropDown/DownArrow";
+import { useMediaQuery } from "react-responsive";
+import { sideBar } from "@recoil/sideBar";
 
 const DAY_FORMAT = "YYYY-MM-DD";
 
 const DashHeader = () => {
   const dateRange = useRecoilValue(dateState);
+  const isMobile = useMediaQuery({
+    query: "(max-width:710px)",
+  });
 
   const [isModal, setIsModal] = useState<boolean>(false);
+  const [isSide, setIsSide] = useRecoilState(sideBar);
 
   const handleModal = () => {
     setIsModal(!isModal);
@@ -23,6 +29,11 @@ const DashHeader = () => {
 
   const handleClose = () => {
     setIsModal(false);
+  };
+
+  const handleSide = () => {
+    if (!isMobile) return;
+    setIsSide(true);
   };
 
   const modalRef = useOutsideClick(handleClose);
@@ -39,7 +50,9 @@ const DashHeader = () => {
 
   return (
     <DashboarHeader>
-      <Title>대시보드</Title>
+      <Title isMobile={isMobile} onClick={() => handleSide()}>
+        {isMobile ? "☰" : "대시보드"}
+      </Title>
       <DateWrapper ref={modalRef}>
         <DateText onClick={handleModal}>
           <span>
@@ -51,6 +64,7 @@ const DashHeader = () => {
         </DateText>
         {isModal && (
           <DateCalendar
+            isMobile={isMobile}
             editableDateInputs={false}
             locale={ko}
             months={2}
@@ -86,10 +100,17 @@ const DashboarHeader = styled.div`
   justify-content: space-between;
 `;
 
-const Title = styled.h1`
+const Title = styled.h1<{ isMobile: boolean }>`
   font-size: 26px;
   font-weight: 900;
   color: #3a474e;
+
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      cursor: pointer;
+      user-select: none;
+    `}
 `;
 
 const DateText = styled.span`
@@ -118,9 +139,14 @@ const DateWrapper = styled.div`
   overflow: hidden;
 `;
 
-const DateCalendar = styled(DateRange)`
+const DateCalendar = styled(DateRange)<{ isMobile: boolean }>`
   position: absolute;
   top: 60px;
   right: 0;
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      width: 100%;
+    `}
 `;
 export default DashHeader;

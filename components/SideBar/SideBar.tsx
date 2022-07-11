@@ -1,6 +1,10 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
+import { useMediaQuery } from "react-responsive";
+import { useRecoilState } from "recoil";
+import { sideBar } from "@recoil/sideBar";
+import useOutsideClick from "@hooks/useOutsideClick";
 
 const MENU_LIST = [
   { name: "대시보드", link: "/" },
@@ -9,13 +13,23 @@ const MENU_LIST = [
 
 const SideBar = () => {
   const [activeMenu, setActiveMenu] = useState<number>(0);
+  const isMobile = useMediaQuery({
+    query: "(max-width:710px)",
+  });
+
+  const [isSide, setIsSIde] = useRecoilState(sideBar);
+
+  const handleClose = () => {
+    setIsSIde(false);
+  };
 
   const handleMenu = (index: number) => {
     setActiveMenu(index);
   };
+  const sideBarRef = useOutsideClick(handleClose);
 
   return (
-    <SideBarWrapper>
+    <SideBarWrapper isMobile={isMobile} isSide={isSide} ref={sideBarRef}>
       <LogoBox>
         <Logo src="/images/logo.png" />
         <UnderLine />
@@ -37,16 +51,32 @@ const SideBar = () => {
   );
 };
 
-const SideBarWrapper = styled.div`
+const SideBarWrapper = styled.div<{ isMobile: boolean; isSide: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  height: 100%;
   display: flex;
   flex-direction: column;
   min-width: 180px;
   padding: 50px;
   background: #ffffff;
   box-shadow: 4px 0px 10px rgba(0, 0, 0, 0.04);
-  @media screen and (max-width: 710px) {
-    display: none;
-  }
+
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      left: -280px;
+      transition: all 0.35s;
+    `}
+
+  ${({ isSide }) =>
+    isSide &&
+    css`
+      left: 0;
+      transition: all 0.35s;
+    `}
 `;
 
 const LogoBox = styled.div``;

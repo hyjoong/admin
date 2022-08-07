@@ -11,6 +11,7 @@ import { dateState } from "@recoil/dashBoard";
 import DownArrow from "@components/DropDown/DownArrow";
 import { useMediaQuery } from "react-responsive";
 import { sideBar } from "@recoil/sideBar";
+import CalendarIcon from "@components/svg/Calendar";
 
 const DAY_FORMAT = "YYYY-MM-DD";
 
@@ -45,47 +46,69 @@ const DashHeader = () => {
     });
   };
 
-  const displayStartDate = dayjs(dateRange.startDate).format("YYYY-MM-DD");
-  const displayEndDate = dayjs(dateRange.endDate).format("YYYY-MM-DD");
+  const handleDateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+
+    setDateRange({
+      ...dateRange,
+      [name]: value,
+    });
+  };
 
   return (
     <DashboarHeader>
       <Title isMobile={isMobile} onClick={() => handleSide()}>
         {isMobile ? "☰" : "대시보드"}
       </Title>
-      <DateWrapper ref={modalRef}>
-        <DateText onClick={handleModal}>
-          <span>
-            {displayStartDate} ~ {displayEndDate}
-          </span>
-          <ArrowIcon isModal={isModal}>
+      <DateWrapper>
+        <DateText>
+          <input
+            name="startDate"
+            value={dateRange.startDate}
+            onChange={handleDateInput}
+            maxLength={10}
+          />
+          <p>~</p>
+          <input
+            name="endDate"
+            value={dateRange.endDate}
+            onChange={handleDateInput}
+            maxLength={10}
+          />
+          <button onClick={handleModal}>
+            <CalendarIcon />
+          </button>
+
+          <ArrowIcon isModal={isModal} onClick={handleModal}>
             <DownArrow />
           </ArrowIcon>
         </DateText>
-        {isModal && (
-          <DateCalendar
-            isMobile={isMobile}
-            editableDateInputs={false}
-            locale={ko}
-            months={2}
-            onChange={(el) => handleDateRange(el.selection)}
-            ranges={[
-              {
-                startDate: new Date(dateRange.startDate),
-                endDate: new Date(dateRange.endDate),
-                key: "selection",
-              },
-            ]}
-            direction="horizontal"
-            dateDisplayFormat="yyyy년 MM월 dd일"
-            monthDisplayFormat="yyyy년 MM월"
-            rangeColors={["#586cf5"]}
-            showPreview={false}
-            showDateDisplay={false}
-            minDate={new Date("2022-02-01")}
-            maxDate={new Date("2022-04-20")}
-          />
-        )}
+        <div ref={modalRef}>
+          {isModal && (
+            <DateCalendar
+              isMobile={isMobile}
+              editableDateInputs={false}
+              locale={ko}
+              months={2}
+              onChange={(el) => handleDateRange(el.selection)}
+              ranges={[
+                {
+                  startDate: new Date(dateRange.startDate),
+                  endDate: new Date(dateRange.endDate),
+                  key: "selection",
+                },
+              ]}
+              direction="horizontal"
+              dateDisplayFormat="yyyy년 MM월 dd일"
+              monthDisplayFormat="yyyy년 MM월"
+              rangeColors={["#586cf5"]}
+              showPreview={false}
+              showDateDisplay={false}
+              minDate={new Date("2022-02-01")}
+              maxDate={new Date("2022-04-20")}
+            />
+          )}
+        </div>
       </DateWrapper>
     </DashboarHeader>
   );
@@ -114,11 +137,22 @@ const Title = styled.h1<{ isMobile: boolean }>`
 `;
 
 const DateText = styled.span`
-  font-size: 14px;
   display: flex;
-  padding: 10px 0;
   justify-content: flex-end;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 14px;
   cursor: pointer;
+
+  p {
+    padding: 0 5px;
+  }
+  input {
+    background: transparent;
+    border: none;
+
+    width: 70px;
+  }
 `;
 
 const ArrowIcon = styled.div<{ isModal: boolean }>`
@@ -148,5 +182,6 @@ const DateCalendar = styled(DateRange)<{ isMobile: boolean }>`
     css`
       width: 100%;
     `}
+  border: 1px solid rgba(0,0,0,0.1);
 `;
 export default DashHeader;

@@ -15,8 +15,21 @@ import CalendarIcon from "@components/svg/Calendar";
 
 const DAY_FORMAT = "YYYY-MM-DD";
 
+type DateType = {
+  selection: {
+    startDate: Date;
+    endDate: Date;
+    key: string;
+  };
+};
+
 const DashHeader = () => {
   const dateRange = useRecoilValue(dateState);
+  const [tempStartDate, setTempStartDate] = useState<string>(
+    dateRange.startDate
+  );
+  const [tempEndDate, setTempEndDate] = useState<string>(dateRange.endDate);
+
   const isMobile = useMediaQuery({
     query: "(max-width:710px)",
   });
@@ -36,22 +49,43 @@ const DashHeader = () => {
     if (!isMobile) return;
     setIsSide(true);
   };
-
   const modalRef = useOutsideClick(handleClose);
   const setDateRange = useSetRecoilState(dateState);
-  const handleDateRange = (selection) => {
-    setDateRange({
-      startDate: dayjs(selection.startDate).format(DAY_FORMAT),
-      endDate: dayjs(selection.endDate).format(DAY_FORMAT),
-    });
+  const handleDateRange = (element: DateType) => {
+    setTempStartDate(dayjs(element.selection.startDate).format(DAY_FORMAT));
+    setTempEndDate(dayjs(element.selection.endDate).format(DAY_FORMAT));
+  };
+
+  const dateIsValid = () => {
+    return (
+      !Number.isNaN(new Date(tempStartDate).getTime()) &&
+      new Date("2022-02-01").getTime() <= new Date(tempStartDate).getTime() &&
+      new Date(tempStartDate).getTime() <= new Date("2022-04-20").getTime() &&
+      !Number.isNaN(new Date(tempEndDate).getTime()) &&
+      new Date("2022-02-01").getTime() <= new Date(tempEndDate).getTime() &&
+      new Date(tempEndDate).getTime() <= new Date("2022-04-20").getTime()
+    );
   };
 
   const handleDateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
 
+    if (name === "startDate") {
+      setTempStartDate(value);
+    } else {
+      setTempEndDate(value);
+    }
+  };
+
+  const handleLookupData = () => {
+    const isValid = dateIsValid();
+    if (!isValid) {
+      alert("날짜는 2022-02-01 ~ 2022-04-20 사이로 선택해 주세요.");
+      return;
+    }
     setDateRange({
-      ...dateRange,
-      [name]: value,
+      startDate: tempStartDate,
+      endDate: tempEndDate,
     });
   };
 
@@ -64,14 +98,14 @@ const DashHeader = () => {
         <DateText>
           <input
             name="startDate"
-            value={dateRange.startDate}
+            value={tempStartDate}
             onChange={handleDateInput}
             maxLength={10}
           />
           <p>~</p>
           <input
             name="endDate"
-            value={dateRange.endDate}
+            value={tempEndDate}
             onChange={handleDateInput}
             maxLength={10}
           />
@@ -90,7 +124,7 @@ const DashHeader = () => {
               editableDateInputs={false}
               locale={ko}
               months={2}
-              onChange={(el) => handleDateRange(el.selection)}
+              onChange={(el: DateType) => handleDateRange(el)}
               ranges={[
                 {
                   startDate: new Date(dateRange.startDate),
@@ -109,6 +143,9 @@ const DashHeader = () => {
             />
           )}
         </div>
+        <ButtonWrapper>
+          <button onClick={handleLookupData}>조회</button>
+        </ButtonWrapper>
       </DateWrapper>
     </DashboarHeader>
   );
@@ -169,7 +206,6 @@ const ArrowIcon = styled.div<{ isModal: boolean }>`
 const DateWrapper = styled.div`
   margin-right: 20px;
   display: flex;
-  flex-direction: column;
   overflow: hidden;
 `;
 
@@ -183,5 +219,22 @@ const DateCalendar = styled(DateRange)<{ isMobile: boolean }>`
       width: 100%;
     `}
   border: 1px solid rgba(0,0,0,0.1);
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  button {
+    border: 1px solid;
+    padding: 5px 10px;
+    border-radius: 7px;
+    color: #ffffff;
+    background-color: #586cf5;
+
+    :hover {
+      filter: brightness(110%);
+    }
+  }
 `;
 export default DashHeader;

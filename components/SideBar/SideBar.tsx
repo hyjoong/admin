@@ -1,10 +1,11 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
 import { useMediaQuery } from "react-responsive";
 import { useRecoilState } from "recoil";
 import { sideBar } from "@recoil/sideBar";
 import useOutsideClick from "@hooks/useOutsideClick";
+import { useRouter } from "next/router";
 
 const MENU_LIST = [
   { name: "대시보드", link: "/" },
@@ -12,20 +13,17 @@ const MENU_LIST = [
 ];
 
 const SideBar = () => {
-  const [activeMenu, setActiveMenu] = useState<number>(0);
   const isMobile = useMediaQuery({
     query: "(max-width:710px)",
   });
 
-  const [isSide, setIsSIde] = useRecoilState(sideBar);
+  const [isSide, setIsSIde] = useRecoilState<boolean>(sideBar);
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setIsSIde(false);
   };
+  const router = useRouter();
 
-  const handleMenu = (index: number) => {
-    setActiveMenu(index);
-  };
   const sideBarRef = useOutsideClick(handleClose);
 
   return (
@@ -37,13 +35,11 @@ const SideBar = () => {
       <Subtitle>광고센터</Subtitle>
       <NavList>
         {MENU_LIST.map((nav, index) => (
-          <Link href={`${nav.link}`} as={`${nav.link}`}>
+          <Link href={`${nav.link}?`} as={`${nav.link}`}>
             <NavItem
-              active={activeMenu === index}
-              onClick={() => handleMenu(index)}
-            >
-              {`${nav.name}`}
-            </NavItem>
+              active={router.pathname === nav.link}
+              key={index}
+            >{`${nav.name}`}</NavItem>
           </Link>
         ))}
       </NavList>

@@ -127,8 +127,8 @@ const DashHeader = () => {
               onChange={(el: DateType) => handleDateRange(el)}
               ranges={[
                 {
-                  startDate: new Date(dateRange.startDate),
-                  endDate: new Date(dateRange.endDate),
+                  startDate: new Date(tempStartDate),
+                  endDate: new Date(tempEndDate),
                   key: "selection",
                 },
               ]}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DateRange } from "react-date-range";
+import { DateRange, RangeKeyDict } from "react-date-range";
 import dayjs from "dayjs";
 import styled, { css } from "styled-components";
 import useOutsideClick from "@hooks/useOutsideClick";
@@ -15,14 +15,6 @@ import CalendarIcon from "@components/svg/Calendar";
 
 const DAY_FORMAT = "YYYY-MM-DD";
 
-type DateType = {
-  selection: {
-    startDate: Date;
-    endDate: Date;
-    key: string;
-  };
-};
-
 const DashHeader = () => {
   const dateRange = useRecoilValue(dateState);
   const [tempStartDate, setTempStartDate] = useState<string>(
@@ -37,23 +29,23 @@ const DashHeader = () => {
   const [isModal, setIsModal] = useState<boolean>(false);
   const [isSide, setIsSide] = useRecoilState(sideBar);
 
-  const handleModal = () => {
+  const handleModal = (): void => {
     setIsModal(!isModal);
   };
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setIsModal(false);
   };
 
-  const handleSide = () => {
+  const handleSide = (): void => {
     if (!isMobile) return;
     setIsSide(true);
   };
   const modalRef = useOutsideClick(handleClose);
   const setDateRange = useSetRecoilState(dateState);
-  const handleDateRange = (element: DateType) => {
-    setTempStartDate(dayjs(element.selection.startDate).format(DAY_FORMAT));
-    setTempEndDate(dayjs(element.selection.endDate).format(DAY_FORMAT));
+  const handleDateRange = ({ selection }: RangeKeyDict) => {
+    setTempStartDate(dayjs(selection.startDate).format(DAY_FORMAT));
+    setTempEndDate(dayjs(selection.endDate).format(DAY_FORMAT));
   };
 
   const dateIsValid = () => {
@@ -67,7 +59,7 @@ const DashHeader = () => {
     );
   };
 
-  const handleDateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDateInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { value, name } = e.target;
 
     if (name === "startDate") {
@@ -77,7 +69,7 @@ const DashHeader = () => {
     }
   };
 
-  const handleLookupData = () => {
+  const handleLookupData = (): void => {
     const isValid = dateIsValid();
     if (!isValid) {
       alert("날짜는 2022-02-01 ~ 2022-04-20 사이로 선택해 주세요.");
@@ -124,7 +116,7 @@ const DashHeader = () => {
               editableDateInputs={false}
               locale={ko}
               months={2}
-              onChange={(el: DateType) => handleDateRange(el)}
+              onChange={handleDateRange}
               ranges={[
                 {
                   startDate: new Date(tempStartDate),

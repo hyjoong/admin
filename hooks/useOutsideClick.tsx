@@ -13,10 +13,10 @@ const useOutsideClick = (onClose: () => void) => {
     [onClose]
   );
   useEffect(() => {
-    document.addEventListener("mousedown", clickListener);
+    document.addEventListener("click", clickListener);
 
     return () => {
-      document.removeEventListener("mousedown", clickListener);
+      document.removeEventListener("click", clickListener);
     };
   });
   return ref;

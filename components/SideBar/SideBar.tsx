@@ -63,14 +63,14 @@ const SideBarWrapper = styled.div<{ isMobile: boolean; isSide: boolean }>`
   ${({ isMobile }) =>
     isMobile &&
     css`
-      left: -280px;
+      transform: translateX(-280px);
       transition: all 0.35s;
     `}
 
   ${({ isSide }) =>
     isSide &&
     css`
-      left: 0;
+      transform: translateX(0);
       transition: all 0.35s;
     `}
 `;

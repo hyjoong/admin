@@ -8,8 +8,8 @@ import useOutsideClick from "@hooks/useOutsideClick";
 import { useRouter } from "next/router";
 
 const MENU_LIST = [
-  { name: "대시보드", link: "/" },
-  { name: "광고관리", link: "/advertise" },
+  { name: "victory", link: "/" },
+  { name: "nivo", link: "/nivo" },
 ];
 
 const SideBar = () => {

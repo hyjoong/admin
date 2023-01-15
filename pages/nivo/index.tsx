@@ -1,21 +1,14 @@
 import React from "react";
 import BaseLayout from "@components/BaseLayout/BaseLayout";
-import NivoChart from "@components/NivoChart";
 import { GetServerSideProps } from "next";
 import { getStock } from "api/stock";
+import NivoContainer from "@components/NivoContainer";
 
 const Nivo = ({ stockList }) => {
   return (
-    <div
-      style={{
-        width: "auto",
-        height: "400px",
-        margin: "0 auto",
-        padding: "0 50px",
-      }}
-    >
-      <NivoChart data={stockList} />
-    </div>
+    <BaseLayout>
+      <NivoContainer data={stockList} />
+    </BaseLayout>
   );
 };
 

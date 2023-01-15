@@ -6,16 +6,23 @@ import { getStock } from "api/stock";
 
 const Nivo = ({ stockList }) => {
   return (
-    <BaseLayout>
-      <NivoChart stockList={stockList} />
-    </BaseLayout>
+    <div
+      style={{
+        width: "auto",
+        height: "400px",
+        margin: "0 auto",
+        padding: "0 50px",
+      }}
+    >
+      <NivoChart data={stockList} />
+    </div>
   );
 };
 
 export default Nivo;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { data } = await getStock({ numOfRows: "8" });
+  const { data } = await getStock({ numOfRows: "7", itmsNm: "삼성전자" });
   const stockList = data?.response?.body.items.item;
   return {
     props: {

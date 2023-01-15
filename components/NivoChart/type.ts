@@ -1,5 +1,5 @@
 export interface StockProps {
-  stockList: Stock[];
+  data: IStock[];
 }
 
 export interface Stock {
@@ -18,4 +18,7 @@ export interface Stock {
   trPrc: string;
   trqu: string;
   vs: string;
+}
+export interface IStock {
+  [key: string]: string;
 }

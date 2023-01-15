@@ -13,6 +13,21 @@ export const Root = styled.div`
     position: relative;
     display: flex;
     justify-content: space-between;
+
+    .calendar-box {
+      display: flex;
+      .btn-lookup {
+        border: 1px solid;
+        padding: 5px 10px;
+        border-radius: 7px;
+        color: #ffffff;
+        background-color: #586cf5;
+
+        :hover {
+          filter: brightness(110%);
+        }
+      }
+    }
   }
 `;
 

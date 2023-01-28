@@ -4,8 +4,11 @@ import { RecoilRoot } from "recoil";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyle } from "../styles/global-style";
 import { theme } from "../styles/theme";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const queryClient = new QueryClient();
+
   return (
     <>
       <Head>
@@ -15,7 +18,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <GlobalStyle />
       <RecoilRoot>
         <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+          </QueryClientProvider>
         </ThemeProvider>
       </RecoilRoot>
     </>

@@ -14,6 +14,12 @@ export const Root = styled.div`
     display: flex;
     justify-content: space-between;
 
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #3a474e;
+    }
+
     .calendar-box {
       display: flex;
       .btn-lookup {

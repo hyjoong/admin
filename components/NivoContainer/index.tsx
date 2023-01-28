@@ -11,12 +11,13 @@ import { RangeKeyDict } from "react-date-range";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { dateState } from "@recoil/dashBoard";
 import useOutsideClick from "@hooks/useOutsideClick";
-import { getStockDate } from "api/stock";
+import { getStock, getStockDate } from "api/stock";
 import { Loading } from "@components/svg/Loading";
+import { useQuery } from "react-query";
 
 const DAY_FORMAT = "YYYY-MM-DD";
 
-const NivoContainer = ({ data }: StockProps) => {
+const NivoContainer = () => {
   const [stockData, setStockData] = useState();
   const [isCalendar, setIsCalendar] = useState(false);
   const setDateRange = useSetRecoilState(dateState);
@@ -70,10 +71,20 @@ const NivoContainer = ({ data }: StockProps) => {
     }
   };
 
+  const { data, isLoading: initialLoading } = useQuery(
+    "stock",
+    () => getStock({ numOfRows: "7", itmsNm: "삼성전자" }),
+    {
+      onError: (error: Error) => {
+        console.error("error", error);
+      },
+    }
+  );
+
   return (
     <Root>
       <div className="chart-header">
-        <p>기간</p>
+        <h1>대시보드</h1>
         <div className="calendar-box">
           <button onClick={handleCalendar}>
             <CalendarIcon />
@@ -110,7 +121,11 @@ const NivoContainer = ({ data }: StockProps) => {
           </div>
         </div>
       </div>
-      {isLoading ? <Loading /> : <NivoChart data={stockData ?? data} />}
+      {isLoading || initialLoading ? (
+        <Loading />
+      ) : (
+        <NivoChart data={stockData ?? data.data.response.body.items.item} />
+      )}
     </Root>
   );
 };

@@ -1,19 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DateCalendar, Root } from "./style";
 import NivoChart from "@components/NivoChart";
-import { StockProps } from "@components/NivoChart/type";
 import CalendarIcon from "@components/svg/Calendar";
 import ko from "date-fns/locale/ko";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import dayjs from "dayjs";
 import { RangeKeyDict } from "react-date-range";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { dateState } from "@recoil/dashBoard";
 import useOutsideClick from "@hooks/useOutsideClick";
-import { getStock, getStockDate } from "api/stock";
 import { Loading } from "@components/svg/Loading";
-import { useQuery } from "react-query";
+import axios from "axios";
 
 const DAY_FORMAT = "YYYY-MM-DD";
 
@@ -57,13 +55,15 @@ const NivoContainer = () => {
   const getData = async (startDate, endDate) => {
     setIsLoading(true);
     try {
-      const { data } = await getStockDate({
-        startDate: startDate,
-        endDate: endDate,
-        itmsNm: "삼성전자",
+      const { data } = await axios.get("api/stockDate", {
+        params: {
+          startDate: startDate,
+          endDate: endDate,
+          itmsNm: "삼성전자",
+        },
       });
-      const stockList = data?.response?.body.items.item;
-      setStockData(stockList);
+      const stockData = data?.data?.response?.body.items.item;
+      setStockData(stockData);
     } catch (error: unknown) {
       console.error("get stock api is failed", error);
     } finally {
@@ -71,15 +71,26 @@ const NivoContainer = () => {
     }
   };
 
-  const { data, isLoading: initialLoading } = useQuery(
-    "stock",
-    () => getStock({ numOfRows: "7", itmsNm: "삼성전자" }),
-    {
-      onError: (error: Error) => {
-        console.error("error", error);
-      },
+  const getStockData = async () => {
+    try {
+      const { data } = await axios.get(`/api/stock`, {
+        params: {
+          numOfRows: "7",
+          itmsNm: "삼성전자",
+        },
+      });
+      const stockData = data?.data?.response?.body.items.item;
+      setStockData(stockData);
+    } catch (error) {
+      console.error("get stock api is failed", error);
+    } finally {
+      setIsLoading(false);
     }
-  );
+  };
+
+  useEffect(() => {
+    getStockData();
+  }, []);
 
   return (
     <Root>
@@ -121,11 +132,7 @@ const NivoContainer = () => {
           </div>
         </div>
       </div>
-      {isLoading || initialLoading ? (
-        <Loading />
-      ) : (
-        <NivoChart data={stockData ?? data.data.response.body.items.item} />
-      )}
+      {isLoading || !stockData ? <Loading /> : <NivoChart data={stockData} />}
     </Root>
   );
 };

@@ -61,7 +61,11 @@ const NivoContainer = () => {
           endDate: endDate,
           itmsNm: "삼성전자",
         },
+        headers: {
+          "Cache-Control": "public, max-age=300, stale-while-revalidate=86400",
+        },
       });
+
       const stockData = data?.data?.response?.body.items.item;
       setStockData(stockData);
     } catch (error: unknown) {
@@ -77,6 +81,9 @@ const NivoContainer = () => {
         params: {
           numOfRows: "7",
           itmsNm: "삼성전자",
+        },
+        headers: {
+          "Cache-Control": "public, max-age=300, stale-while-revalidate=86400",
         },
       });
       const stockData = data?.data?.response?.body.items.item;
